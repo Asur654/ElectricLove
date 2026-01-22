@@ -1,9 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import Image from "next/image";
-import Logo from "../../my-app/public/images/Logo5.png";
-import Profile from "@/components/profile";
-import { FaCartShopping } from "react-icons/fa6";
 import {
   DraggableCardBody,
   DraggableCardContainer,
@@ -12,6 +8,7 @@ import Featured from "@/components/Featured";
 import WhyElove from "@/components/WhyElove";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
+import TopNav from "@/components/TopNav";
 
 const Home = () => {
   const items = [
@@ -48,20 +45,8 @@ const Home = () => {
   ];
 
   return (
-    <div className="gap-6 flex flex-col w-full min-h-screen bg-neutral-950">
-      <nav className="sticky bg-neutral-950 w-full top-0 flex justify-between px-4 py-1 z-50">
-        <Image
-          src={Logo}
-          width={60}
-          height={60}
-          alt="Logo"
-          className="hover:scale-120 transform ease-in-out duration-200"
-        />
-        <div className="flex items-center justify-center gap-2">
-          <Profile />
-          <FaCartShopping className="text-white text-2xl hover:scale-120 transform ease-in-out duration-200" />
-        </div>
-      </nav>
+    <div className="gap-6 flex flex-col w-full min-h-screen bg-neutral-950 px-10">
+      <TopNav page="Home" />
       <section className="h-screen bg-neutral-950 px-10">
         <div className="flex items-center justify-between h-[80%]">
           <div>
@@ -145,10 +130,6 @@ const Home = () => {
           <Testimonials />
         </div>
       </section>
-
-      <footer className="min-h-fit w-full bg-neutral-950 flex flex-col mt-32 gap-12 px-10">
-      <Footer />
-      </footer>
     </div>
   );
 };

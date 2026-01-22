@@ -1,8 +1,12 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-
+import { addToCart } from "@/utils/CartActions";
+import {useAuthState} from 'react-firebase-hooks/auth';
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { auth } from "@/lib/firebase";
 
 export const HoverEffect = ({
   items,
@@ -13,16 +17,21 @@ export const HoverEffect = ({
     description: string;
     images: string[];
     price: number;
-  }[];
+  }[],
   className?: string;
 }) => {
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [active, setActive] = useState<any | null>(null);
+  const [user] = useAuthState(auth);
+  const addTocart = (item) => {
+    addToCart({ data: item , Useruid: user?.uid });
+    toast.success("Item added to cart successfully");
+  };
 
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2  lg:grid-cols-5  py-10",
+        "py-10",
         className
       )}
     >
@@ -41,7 +50,8 @@ export const HoverEffect = ({
             stiffness: 300,
             damping: 30
           }}
-          className="w-70 h-[480px] rounded-xl bg-neutral-800 border border-transparent p-4 group-hover:border-slate-700 shadow-sm shadow-emmerald-400/20 z-30"
+          className="w-70 h-[480px] rounded-xl bg-neutral-800 border border-transparent p-4 group-hover:border-slate-700 shadow-sm shadow-emerald-400/20 z-30"
+          onClick={(e)=>{e.stopPropagation()}}
           >
           <motion.div 
           className="grid grid-rows-[160px,1fr,60px] h-[480px] w-full p-4 group z-30"
@@ -64,10 +74,20 @@ export const HoverEffect = ({
               {active.description}
             </CardDescription>
             </div>
-          </motion.div>
           <div>
-            <p className="text-black bg-neutral-200 font-semibold">{active.category}</p>
+            <button
+                  className="bg-white text-neutral-950 px-3 py-1 rounded-md
+                  hover:bg-neutral-300 hover:scale-105 transition-all duration-300
+                  hover:shadow-[0_0_15px_rgba(225,225,225,0.6)]"
+                  onClick={() => addToCart({ data: active , Useruid: user?.uid })}
+                >
+                  Add to Cart
+                </button>
           </div>
+          <div>
+            {active.rating}
+          </div>
+          </motion.div>
           </motion.div>
         </motion.div>
       )}
@@ -112,22 +132,30 @@ export const HoverEffect = ({
 
             {/* Title + Description */}
             <div className="flex flex-col overflow-hidden min-h-[190px]">
-              <CardTitle className="line-clamp-2 text-lg">
+              <CardTitle className="line-clamp-2 text-lg text-white font-semibold">
                 {item.title}
               </CardTitle>
 
-              <CardDescription className="line-clamp-4 text-sm mt-1">
+              <CardDescription className="line-clamp-4 text-sm mt-1 ">
                 {item.description}
               </CardDescription>
             </div>
 
             {/* Bottom */}
             <div className="flex items-center justify-between">
-              <p className="text-white font-semibold">₹{item.price}</p>
+              <p className="text-white font-semibold">$ { item.price }</p>
 
-              <button className="bg-emerald-400 text-black hover:bg-emerald-300 px-3 py-1 rounded-md">
-                Add to Cart
-              </button>
+              <button
+                  className="bg-white text-neutral-950 px-3 py-1 rounded-md
+                  hover:bg-neutral-300 hover:scale-105 transition-all duration-300
+                  hover:shadow-[0_0_15px_rgba(225,225,225,0.6)]"
+                  onClick={(e)=>{
+                    e.stopPropagation();
+                    addToCart({ data: item , Useruid: user?.uid });
+                  }}
+                >
+                  Add to Cart
+                </button>
             </div>
           </Card>
         </motion.div>
@@ -146,7 +174,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-2xl h-full w-full p-4 overflow-hidden bg-neutral-800 border border-transparent dark:border-white/20 group-hover:border-slate-700 relative z-20 flex flex-col justify-between",
+        "rounded-2xl h-full w-full p-4 overflow-hidden bg-neutral-900 border border-transparent dark:border-white/20 group-hover:border-slate-700 relative z-20 flex flex-col justify-between",
         className
       )}
     >

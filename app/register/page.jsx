@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
   signInWithPopup,
 } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "../../lib/firebase";
+import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
@@ -15,56 +18,65 @@ import { cn } from "@/lib/utils";
 import {
   IconBrandGithub,
   IconBrandGoogle,
-  IconBrandOnlyfans,
 } from "@tabler/icons-react";
+import { firestoreProfileSetup } from "@/utils/firestoreProileSetup";
 
 const Register = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, {
-        displayName: firstname + lastname,
+      setLoading(true); 
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(result.user, {
+        displayName: firstname + " " + lastname,
       });
-      alert("Account created!");
-
       setEmail("");
       setPassword("");
       setFirstname("");
       setLastname("");
+      firestoreProfileSetup(result.user);
+      toast.success("Account created!");
+      router.push('/');
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
+    } finally {
+    setLoading(false);
     }
   };
 
   const loginWithGoogle = async () => {
     try {
+      setLoading(true);
       const result = await signInWithPopup(auth, googleProvider);
-
-      // User data
-      console.log("User:", result.user);
-
-      alert("Logged in with Google!");
+      firestoreProfileSetup(result.user);
+      toast.success("Signed up with Google!");
+      router.push('/');
     } catch (err) {
-      console.error(err);
-      alert(err.message);
+      toast.error(err.message);
+    }finally {
+    setLoading(false);
     }
   };
 
   const loginWithGithub = async () => {
+    setLoading(true);
     try {
       const result = await signInWithPopup(auth, githubProvider);
-
-      console.log(result.user);
-      alert("Logged in with GitHub!");
+      firestoreProfileSetup(result.user);
+      toast.success("Signed up with GitHub!");
+      router.push('/');
     } catch (err) {
-      console.error(err);
-      alert(err.message);
+      toast.error(err.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -84,19 +96,23 @@ const Register = () => {
           <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
             <LabelInputContainer>
               <Label htmlFor="firstname">First name</Label>
-              <Input id="firstname" placeholder="Walter" type="text" />
+              <Input 
+              id="firstname" 
+              placeholder="Walter" 
+              type="text"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)} />
             </LabelInputContainer>
 
             <LabelInputContainer>
               <Label htmlFor="lastname">Last name</Label>
-              <Input id="lastname" placeholder="White" type="text" />
+              <Input 
+              id="lastname" 
+              placeholder="White" 
+              type="text"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)} />
             </LabelInputContainer>
-
-            {/* <VanishInput
-              ref={emailRef}
-              placeholders={["Email", "Enter your email"]}
-              onChange={() => {}}
-            /> */}
           </div>
 
           <LabelInputContainer className="mb-4">
@@ -124,6 +140,7 @@ const Register = () => {
           <button
             className="group/btn relative block h-10 w-full rounded-md bg-green-500 font-medium text-black shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] hover:bg-green-400 cursor-pointer"
             type="submit"
+            disabled={loading}
           >
             Sign up →
             <BottomGradient />
@@ -132,13 +149,14 @@ const Register = () => {
           <div className="my-8 h-px w-full bg-linear-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
           <div className="flex justify-center space-y-4 gap-8">
             <div onClick={loginWithGoogle}>
-              <SocialButton icon={<IconBrandGoogle />} text="Google" />
+              <SocialButton icon={<IconBrandGoogle />} loading={loading} text="Google" />
             </div>
             <div onClick={loginWithGithub}>
-              <SocialButton icon={<IconBrandGithub />} text="GitHub" />
+              <SocialButton icon={<IconBrandGithub />} loading={loading} text="GitHub" />
             </div>
           </div>
         </form>
+        <p className="text-white font-light -mt-8">Already registered? <Link href="/login" className="underline font-semibold">Login</Link></p>
       </div>
     </div>
   );
@@ -163,10 +181,11 @@ const LabelInputContainer = ({ children, className }) => {
   );
 };
 
-const SocialButton = ({ icon, text }) => (
+const SocialButton = ({ icon, text, loading }) => (
   <button
     className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
     type="button"
+    disabled={loading}
   >
     <span className="h-4 w-4 text-neutral-800 dark:text-neutral-300">
       {icon}

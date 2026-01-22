@@ -10,7 +10,7 @@ const Featured = () => {
   return (
       <div>
         {data && data.length > 0 ? (
-          <HoverEffect items={data.slice(0, 5)} />
+          <HoverEffect items={data.slice(0, 4)} className="grid grid-cols-1 md:grid-cols-3  lg:grid-cols-4" />
         ) : (
           <p className="text-white">No featured products available.</p>
         )}

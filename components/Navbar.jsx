@@ -25,43 +25,36 @@ export function FloatingDockDemo() {
       icon: (
         <AiFillProduct className="h-full w-full text-neutral-950 dark:text-neutral-300" />
       ),
-      href: "/login",
+      href: "/products",
+      
     },
-    {
-      title: "Components",
-      icon: (
-        <IconNewSection className="h-full w-full text-neutral-950 dark:text-neutral-300" />
-      ),
-      href: "#",
-    },
-    {
-      title: "About us",
-      icon: (
-        <FaInfoCircle className="h-full w-full text-neutral-950 dark:text-neutral-300" />
-      ),
-      href: "/register",
-    },
-
     {
       title: "Cart",
       icon: (
         <FaCartShopping className="h-full w-full text-neutral-950 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "/cart",
     },
     {
       title: "Orders",
       icon: (
         <FaHistory className="h-full w-full text-neutral-950 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "/Orders",
     },
     {
       title: "Support",
       icon: (
         <BiSupport className="h-full w-full text-neutral-950 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "/support",
+    },
+    {
+      title: "About us",
+      icon: (
+        <FaInfoCircle className="h-full w-full text-neutral-950 dark:text-neutral-300" />
+      ),
+      href: "/about",
     },
   ];
   return (

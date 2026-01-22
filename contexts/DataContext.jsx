@@ -7,7 +7,7 @@ const AppContext = createContext();
 export function AppProvider({ children }) {
   const [data, setData] = useState([]);
   const [cart, setCart] = useState([]);
-  const allowedCategories = ["smartphones","mens-watches", "laptops","mobile-accessories","womens-watches","tablets",];
+  const allowedCategories = ["smartphones","mens-watches","laptops", "mobile-accessories","womens-watches","tablets","womens-watches"];
 
   useEffect(() => {
     async function fetchData() {

@@ -1,9 +1,11 @@
 import React from "react";
 import { FaInstagram, FaTwitter, FaYoutube, FaGithub } from "react-icons/fa";
+import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-neutral-800 border-t border-neutral-800 py-12 px-10 text-white">
+    <footer className="min-h-fit w-full bg-neutral-950 flex flex-col pt-32 gap-12 px-10">
+    <div className="rounded-md w-full bg-neutral-900 border-t border-neutral-900 py-12 px-10 text-white">
       
       {/* Top Section */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
@@ -26,11 +28,10 @@ const Footer = () => {
             Quick Links
           </h2>
           <ul className="space-y-2 text-zinc-400">
-            <li className="hover:text-emerald-400 transition-colors cursor-pointer">Home</li>
-            <li className="hover:text-emerald-400 transition-colors cursor-pointer">Products</li>
-            <li className="hover:text-emerald-400 transition-colors cursor-pointer">About</li>
-            <li className="hover:text-emerald-400 transition-colors cursor-pointer">Contact</li>
-            <li className="hover:text-emerald-400 transition-colors cursor-pointer">Support</li>
+            <li className="hover:text-emerald-400 transition-colors cursor-pointer"><Link href="/">Home</Link></li>
+            <li className="hover:text-emerald-400 transition-colors cursor-pointer"><Link href="/products">Products</Link></li>
+            <li className="hover:text-emerald-400 transition-colors cursor-pointer"><Link href="/about">About</Link></li>
+            <li className="hover:text-emerald-400 transition-colors cursor-pointer"><Link href="/support">Support</Link></li>
           </ul>
         </div>
 
@@ -57,13 +58,14 @@ const Footer = () => {
       </div>
 
       {/* Divider Line */}
-      <div className="mt-10 h-[2px] w-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-30"></div>
+      <div className="mt-10 h-0.5 w-full bg-linear-to-r from-transparent via-emerald-400 to-transparent opacity-30"></div>
 
       {/* Bottom */}
       <div className="text-center text-zinc-500 text-sm mt-6">
         © {new Date().getFullYear()} Electric Love — All Rights Reserved.
       </div>
 
+    </div>
     </footer>
   );
 };
