@@ -2,11 +2,12 @@ import React from 'react'
 import Image from "next/image";
 import Profile from "@/components/profile";
 import { FaCartShopping } from "react-icons/fa6";
-import Logo from "../../my-app/public/images/Logo5.png";
+import Logo from "public/images/Logo5.png";
 
 const TopNav = ({ page }) => {
+
   return (
-    <nav className="sticky bg-neutral-950 w-full top-0 flex justify-between px-4 py-1 z-50">
+      <nav className="sticky bg-neutral-950 w-full top-0 flex justify-between px-4 py-1 z-50">
         <Image
           src={Logo}
           width={60}
