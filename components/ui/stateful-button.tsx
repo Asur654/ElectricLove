@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useAnimate } from "motion/react";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children: React.ReactNode;
+  loading?: boolean;
 }
 
 export const Button = ({ className, loading, children, ...props }: ButtonProps) => {
